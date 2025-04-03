@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEYNOX IMPORT</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            scroll-behavior: smooth;
+            overflow-x: hidden; 
+        }
+        .header {
+            background: #6d013f;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        .header nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+        }
+        .main-banner, section {
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            min-height: 100vh; 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+        .main-banner {
+            background-image: url('Recursos/Logo 2.png');
+        }
+        #nosotros, #servicios, #contacto {
+            background-image: url('Recursos/Nosotros.png'); 
+        }
+        .overlay {
+            background: rgba(0, 0, 0, 0.5); 
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .main-banner h1, .price {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .price {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .buttons {
+            margin-top: 20px;
+        }
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 20px;
+            background: white;
+            color: #d1005d;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+        .whatsapp:hover {
+            background-color: #1ebe5d;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">LEYNOX IMPORT</div>
+        <nav>
+            <a href="#inicio">Inicio</a>
+            <a href="#nosotros">Nosotros</a>
+            <a href="#servicios">Servicios</a>
+            <a href="#contacto">Contacto</a>
+        </nav>
+    </div>
+    <div class="main-banner" id="inicio">
+        <h1>Reciba sus paquetes desde cualquier tienda a Ecuador</h1>
+        <p><span class="price">A tan solo $5.50</span></p>
+        <div class="buttons">
+            <a href="#contacto" class="button">Cotizar Paquete</a>
+            <a href="#servicios" class="button">Servicios</a>
+        </div>
+    </div>
+    <section id="nosotros">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>Sobre Nosotros</h2>
+            <p>Somos una empresa dedicada a la importación y venta de productos.</p>
+            <p>Nuestro objetivo es brindarle a nuestros clientes un servicio rápido, cómodo y eficiente al momento de comprar o importar.</p>
+        </div>
+    </section>
+    <section id="servicios">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>Nuestros Servicios</h2>
+            <p>Importamos artículos de las tiendas SHEIN, AMAZON Y TEMU.</p>
+            <p>Vendemos artículos tecnológicos al mejor precio, esto puedes verlo en nuestro catálogo.</p>
+        </div>
+    </section>
+    <section id="contacto">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>Contacto</h2>
+            <p>Para cotizaciones póngase en contacto con nosotros tocando el botón CONTACTO y para comprar productos toque el botón PRODUCTOS.</p>
+            <a href="productos.html" class="button">PRODUCTOS</a>
+            <a href="https://wa.me/+593981800617" target="_blank" class="button whatsapp">CONTACTO</a>
+        </div>
+    </section>    
+</body>
+</html>
+
+
