@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LEYNOX IMPORT</title>
+    <style>
+        /* Estilos generales*/
+        .image-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .service-img {
+            width: 200px;  
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid #fff;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .service-img:hover {
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .service-img {
+                width: 100px;
+                height: 130px;
+            }
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: #6d013f;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .menu-btn {
+            display: block;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 10px;
+            background-color: #6d013f;
+            color: white;
+            border: none;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+
+        nav {
+            display: none;
+            flex-direction: column;
+            position: absolute;
+            top: 50px;
+            left: 0;
+            right: 0;
+            background-color: #6d013f;
+            text-align: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            display: block;
+            border-top: 1px solid white;
+        }
+
+        nav a:hover {
+            background-color: #d1005d;
+        }
+
+        .main-banner, section {
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            position: relative;
+        }
+
+        .main-banner {
+            background-image: url('Logo 2.png');
+        }
+
+        #nosotros, #servicios, #contacto, #catalogo {
+            background-image: url('Nosotros.png');
+        }
+
+        .overlay {
+            background: rgba(0, 0, 0, 0.5);
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .main-banner h1, .price {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .price {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .buttons {
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px 20px;
+            background: white;
+            color: #d1005d;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .whatsapp {
+            background-color: #25D366;
+            color: white;
+        }
+
+        .whatsapp:hover {
+            background-color: #1ebe5d;
+        }
+
+        @media (max-width: 768px) {
+            .menu-btn {
+                display: block;
+            }
+
+            nav.active {
+                display: flex;
+            }
+        }
+
+        /* Estilos para el chatbot */
+        #chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0084ff;
+            color: white;
+            font-size: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        #chat-box {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 320px;
+            height: 450px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9998;
+            font-family: Arial, sans-serif;
+        }
+
+        .chat-header {
+            background: #0084ff;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .chat-header button {
+            background: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .message.bot {
+            flex-direction: row;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin: 0 8px;
+        }
+
+        .bubble {
+            background: #e4e6eb;
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 70%;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.user .bubble {
+            background: #0084ff;
+            color: white;
+        }
+
+        .option-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 5px;
+        }
+
+        .option-buttons button {
+            background: #0084ff;
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 10px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: left;
+            transition: background 0.3s;
+        }
+
+        .option-buttons button:hover {
+            background: #006fe0;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .header {
+            background: #6d013f;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .chat-body {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-end;
+        }
+
+        .message.bot {
+            flex-direction: row;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            margin: 0 8px;
+        }
+
+        .bubble {
+            background: #e4e6eb;
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 70%;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+
+        .message.user .bubble {
+            background: #6d013f;
+            color: white;
+        }
+
+        /* Estilos para el chatbot */
+        #chat-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #6d013f;
+            color: white;
+            font-size: 24px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 9999;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+
+        #chat-box {
+            position: fixed;
+            bottom: 90px;
+            right: 20px;
+            width: 320px;
+            height: 450px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 9998;
+            font-family: Arial, sans-serif;
+        }
+
+        .chat-header {
+            background: #6d013f;
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .chat-header button {
+            background: transparent;
+            color: white;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .input-container {
+            padding: 10px;
+            background-color: #fff;
+            border-top: 1px solid #ccc;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .input-container button {
+            background: #6d013f;
+            color: white;
+            border: none;
+            font-size: 16px;
+            padding: 8px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .input-container button:hover {
+            background: #6d013f;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">LEYNOX IMPORT</div>
+    </div>
+
+    <div class="main-banner" id="inicio">
+        <h1>Reciba sus paquetes desde cualquier tienda del extragero a Ecuador</h1>
+        <p><span class="price">A tan solo $5.50 la libra</span></p>
+        <div class="buttons">
+            <a href="cotizador.html" class="button">Cotizar Paquete</a>
+            <a href="#servicios" class="button">Nuestros Servicios</a>
+        </div>
+    </div>
+
+    <section id="nosotros">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>Sobre Nosotros</h2>
+            <p>Somos una empresa dedicada a la importación y venta de productos.</p>
+            <p>Nuestro objetivo es brindarle a nuestros clientes un servicio rápido, cómodo y eficiente al momento de comprar o importar.</p>
+        </div>
+    </section>
+
+    <section id="servicios">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>Servicios</h2>
+            <p>Importamos artículos de las tiendas SHEIN, AMAZON Y TEMU.</p>
+            <p>Tambien vendemos artículos tecnológicos al mejor precio, esto puedes verlo en nuestro catálogo.</p>
+            <div class="image-container">
+                <a href="https://www.shein.com" target="_blank">
+                    <img src="shein.jpg" alt="Servicio 1" class="service-img">
+                </a>
+                <a href="https://www.amazon.com" target="_blank">
+                    <img src="Amazon.jpg" alt="Servicio 2" class="service-img">
+                </a>
+                <a href="https://www.temu.com" target="_blank">
+                    <img src="temu.png" alt="Servicio 3" class="service-img">
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section id="contacto">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>Contacto</h2>
+            <p>Para contactarse con nosotros, por favor toque el boton.</p>
+            <a href="https://wa.me/+593981800617" target="_blank" class="button whatsapp">CONTACTO</a>
+        </div>
+    </section>
+    <section id="catalogo">
+        <div class="overlay"></div>
+        <div class="content">
+            <h2>Catalogo</h2>
+            <p>Para visualizar nuestro catalogo de productos por favor toque el boton.</p>
+            <a href="productos.html" class="button">CATALOGO</a>
+        </div>
+    </section>
+
+<!-- ChatBOT-->
+<div id="chat-toggle" onclick="toggleChat()">💬</div>
+
+<div id="chat-box">
+    <div class="chat-header">
+        <span>LEYBOT</span>
+        <button onclick="closeChat()">✖</button>
+    </div>
+    <div class="chat-body" id="chat-body">
+    </div>
+    <div class="input-container">
+        <input type="text" id="user-input" maxlength="1" oninput="validateInput(event)" placeholder="Escribe el número...">
+        <button onclick="handleUserInput()">Enviar</button>
+    </div>
+</div>
+
+<script>
+    function toggleChat() {
+        const chatBox = document.getElementById('chat-box');
+        chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+    }
+
+    function closeChat() {
+        document.getElementById('chat-box').style.display = 'none';
+    }
+
+    function validateInput(event) {
+        const input = event.target;
+        if (input.value && isNaN(input.value)) {
+            input.value = '';  
+        }
+    }
+
+    async function showMessagesWithDelay() {
+        const chatBody = document.getElementById('chat-body');
+
+        await showMessage("Hola, soy LEYBOT😎", 2000);
+        await showMessage("Solo puedo Ayudarte con lo siguiente:", 3000);
+        await showMessage("1. Cotizar paquete", 1500);
+        await showMessage("2. Ver catálogo", 1500);
+        await showMessage("3. Métodos de pago", 1500);
+        await showMessage("Por favor, ingresa el número de la opción que deseas (1 a 3):", 2500);
+    }
+
+   
+    function showMessage(message, delay) {
+        const chatBody = document.getElementById('chat-body');
+        const botMessage = document.createElement('div');
+        botMessage.className = 'message bot';
+        botMessage.innerHTML = `
+            <img src="https://yt3.ggpht.com/ytc/AIdro_kG98457-bRcecabOZE9o711DpEDfX_as-pqlsSUSnaSDU=s88-c-k-c0x00ffffff-no-rj" alt="Bot" class="avatar">
+            <div class="bubble">${message}</div>
+        `;
+        chatBody.appendChild(botMessage);
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+      
+        return new Promise(resolve => setTimeout(resolve, delay));
+    }
+
+   
+    async function handleUserInput() {
+        const userInput = document.getElementById('user-input').value;
+        if (!userInput) return;
+
+        
+        const chatBody = document.getElementById('chat-body');
+        const userMessage = document.createElement('div');
+        userMessage.className = 'message user';
+        userMessage.innerHTML = `
+            <img src="https://cdn.pixabay.com/photo/2013/07/13/12/07/avatar-159236_1280.png" alt="User" class="avatar">
+            <div class="bubble">${userInput}</div>
+        `;
+        chatBody.appendChild(userMessage);
+
+       
+        const responses = {
+    '1': [
+        "Para cotizar un paquete, por favor visita la sección COTIZAR tocando el botón que está en el inicio.",
+        "O toca la palabra <a href='cotizador.html' target='_blank'>COTIZAR</a> para ir directamente.",
+    ],
+    '2': ["Puedes ver nuestro catálogo completo en la sección CATALOGO.",
+        "O toca la palabra <a href='productos.html' target='_blank'>CATALOGO</a> para ir directamente.",
+    ],
+    '3': [
+        "Aceptamos pagos por transferencia.",
+        "Banco Pinchicha, cuenta de ahorros:",
+        "2206941098",
+        "ARROBA CHARCOPA JEFFERSON JOEL",
+        "No olivides enviar tu comprobante de pago para validar tu compra",
+        "Envialo tocando la palabra <a href='https://wa.me/+593981800617' target='_blank'>WHATSAPP</a> para ir directamente."
+    ],
+};
+     
+        const botTyping = document.createElement('div');
+        botTyping.className = 'message bot';
+        botTyping.innerHTML = `
+            <img src="https://yt3.ggpht.com/ytc/AIdro_kG98457-bRcecabOZE9o711DpEDfX_as-pqlsSUSnaSDU=s88-c-k-c0x00ffffff-no-rj" alt="Bot" class="avatar">
+            <div class="bubble">...</div>
+        `;
+        chatBody.appendChild(botTyping);
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+   
+        setTimeout(async () => {
+            botTyping.remove();
+
+            if (Array.isArray(responses[userInput])) {
+               
+                for (let message of responses[userInput]) {
+                    await showMessage(message, 1500);
+                }
+            } else {
+                
+                const botMessage = document.createElement('div');
+                botMessage.className = 'message bot';
+                botMessage.innerHTML = `
+                    <img src="https://yt3.ggpht.com/ytc/AIdro_kG98457-bRcecabOZE9o711DpEDfX_as-pqlsSUSnaSDU=s88-c-k-c0x00ffffff-no-rj" alt="Bot" class="avatar">
+                    <div class="bubble">${responses[userInput] || "Opción no válida, por favor elige entre 1 y 3."}</div>
+                `;
+                chatBody.appendChild(botMessage);
+                chatBody.scrollTop = chatBody.scrollHeight;
+            }
+        }, 2000); 
+
+        document.getElementById('user-input').value = '';  
+    }
+
+
+    window.onload = function() {
+        showMessagesWithDelay();
+    }
+</script>  
+</body>
+</html>
+
+
+
+
+
+

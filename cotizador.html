@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización de Pedido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f7f7f7;
+            background-image: url('Logo 2.png'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+        }
+
+        .form-container {
+            background-color: rgba(255, 255, 255, 0.8); 
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"], input[type="number"], select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .modal-content h3 {
+            margin: 0;
+        }
+
+        .modal-content p {
+            margin-top: 10px;
+        }
+
+        .modal button {
+            margin-top: 20px;
+            background-color: #28a745;
+        }
+
+    </style>
+</head>
+<body>
+
+    <h1>Cotización de Pedido</h1>
+
+    <div class="form-container">
+        <div class="form-group">
+            <label for="tienda">Tienda:</label>
+            <select id="tienda" required>
+                <option value="amazon">Amazon</option>
+                <option value="shein">Shein</option>
+                <option value="temu">Temu</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo_producto">Tipo de Producto:</label>
+            <select id="tipo_producto" required>
+                <option value="ropa">Ropa</option>
+                <option value="electronica">Electrónica</option>
+                <option value="zapatos">Zapatos</option>
+                <option value="repuestos">Repuestos</option>
+                <option value="cosmeticos">Cosmeticos</option>
+                <option value="alimentos">Alimentos</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="libras">Peso en Libras:</label>
+            <input type="number" id="libras" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="valor">Valor del Pedido ($):</label>
+            <input type="number" id="valor" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label for="tipo_importacion">Tipo de Importación:</label>
+            <select id="tipo_importacion" required>
+                <option value="4x4">Categoría 4X4</option>
+                <option value="impuesto_especifico">Impuesto Específico</option>
+            </select>
+        </div>
+
+        <button onclick="cotizar()">Cotizar</button>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h3>Información de Cotización</h3>
+            <p id="modal-info"></p>
+            <button onclick="cerrarModal()">Cerrar</button>
+        </div>
+    </div>
+
+    <script>
+        function cotizar() {
+            var tienda = document.getElementById('tienda').value;
+            var tipoProducto = document.getElementById('tipo_producto').value;
+            var libras = parseFloat(document.getElementById('libras').value);
+            var valor = parseFloat(document.getElementById('valor').value);
+            var tipoImportacion = document.getElementById('tipo_importacion').value;
+
+            var valorEnvio = libras * 5.50; 
+            var impuesto = 0;
+            var valorTotal = valorEnvio;
+
+            if (tipoImportacion === 'impuesto_especifico') {
+                impuesto = (valor * 0.15); 
+                valorTotal += impuesto;
+            }
+
+            // Validaciones
+            if (tipoImportacion === '4x4') {
+                if (valor > 400 || libras > 8) {
+                    mostrarMensaje("NO SE PUEDE IMPORTAR EN ESTA CATEGORIA, SELECCIONA OTRA CATEGORIA YA QUE SOBREPASAS LOS $400 O LAS 8LB");
+                    return;
+                }
+            }
+
+            if (tipoImportacion === 'impuesto_especifico') {
+                if (valor > 5000 || libras > 220) {
+                    mostrarMensaje("NO SE PUEDE IMPORTAR YA QUE SOBREPASAS LAS 220LB O LOS $5000");
+                    return;
+                }
+            }
+
+            var info = `
+                Tienda: ${tienda}<br>
+                Tipo de Producto: ${tipoProducto}<br>
+                Peso en Libras: ${libras} lb<br>
+                Valor del Pedido: $${valor.toFixed(2)}<br>
+                Valor del Envío: $${valorEnvio.toFixed(2)}<br>
+                Valor de Impuesto: $${impuesto.toFixed(2)}<br>
+                Valor Total de la Importación: $${valorTotal.toFixed(2)}
+            `;
+
+            document.getElementById('modal-info').innerHTML = info;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function mostrarMensaje(mensaje) {
+            document.getElementById('modal-info').innerHTML = mensaje;
+            document.getElementById('modal').style.display = 'flex';
+        }
+
+        function cerrarModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
+
